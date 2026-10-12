@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "assets:check": "node scripts/check-assets.mjs",
-    "assets:doc": "node scripts/check-assets.mjs --write-doc"
+    "assets:doc": "node scripts/check-assets.mjs --write-doc",
+    "build:pages": "vite build && python3 scripts/optimize-images.py"
   },
   "dependencies": {
     "@fontsource/anonymous-pro": "^5.2.6",

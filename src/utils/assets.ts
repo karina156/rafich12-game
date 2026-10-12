@@ -22,13 +22,19 @@ export const assetDef = (key: AssetKey): AssetDef => ASSETS[key];
 type Status = 'loading' | 'ok' | 'missing';
 const status = new Map<string, Status>();
 const listeners = new Map<string, Set<() => void>>();
+const images = new Map<string, HTMLImageElement>();
 
 export function probeImage(url: string): Status {
   const s = status.get(url);
   if (s) return s;
   status.set(url, 'loading');
   const img = new Image();
-  img.onload = () => setStatus(url, 'ok');
+  // держим ссылку на картинку и ждём decode(): тогда она показывается сразу, без «проявления»
+  images.set(url, img);
+  img.onload = () => {
+    const ok = () => setStatus(url, 'ok');
+    if (img.decode) img.decode().then(ok, ok); else ok();
+  };
   img.onerror = () => setStatus(url, 'missing');
   img.src = url;
   return 'loading';

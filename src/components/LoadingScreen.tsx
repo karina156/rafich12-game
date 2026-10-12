@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { AssetKey, LevelId } from '../types/game';
-import { ASSETS, assetUrl, imageStatus, subscribeImage } from '../utils/assets';
+import { ASSETS, assetUrl, imageStatus, stickerUrls, subscribeImage } from '../utils/assets';
 import { useGame } from '../store/gameStore';
 import { Karini } from '../characters/Karini';
 import { ProgressBar } from './ProgressBar';
@@ -26,14 +26,12 @@ const PHRASES = [
 ];
 const MIN_MS = 1400;
 const MAX_MS = 10000;
+/** на очень медленном интернете всё равно пускаем в игру, но не раньше чем через минуту */
+const BOOT_MAX_MS = 60000;
 
-/** Картинки первых экранов: старт, заставка, выбор Рафа, комната, HUD и финальный фон */
-const BOOT = ['raf.', 'karini.', 'monkey.', 'ui.', 'icon.', 'room.', 'bg.', 'final.bg', 'item.bigGift'];
-
-function urlsFor(prefixes: string[]): string[] {
-  return (Object.keys(ASSETS) as AssetKey[])
-    .filter((k) => prefixes.some((p) => k === p || (p.endsWith('.') && k.startsWith(p))))
-    .map((k) => assetUrl(ASSETS[k].path));
+/** Все картинки игры из манифеста (и стикеры) — грузим один раз перед стартом */
+function allUrls(): string[] {
+  return [...(Object.keys(ASSETS) as AssetKey[]).map((k) => assetUrl(ASSETS[k].path)), ...stickerUrls()];
 }
 
 function assetsFor(level: LevelId, raf: string | null): string[] {
@@ -51,12 +49,12 @@ export function useLevelPreload(level: LevelId) {
   return usePreload(`${level}:${raf}`, () => assetsFor(level, raf));
 }
 
-/** Загрузка перед самым началом игры — чтобы старт, заставка и комната открывались уже с картинками */
+/** Настоящая загрузка перед стартом: ждём, пока каждая картинка игры скачается и раскодируется */
 export function useBootPreload() {
-  return usePreload('boot', () => urlsFor(BOOT));
+  return usePreload('boot', allUrls, BOOT_MAX_MS);
 }
 
-function usePreload(key: string, getUrls: () => string[]) {
+function usePreload(key: string, getUrls: () => string[], maxMs = MAX_MS) {
   const [state, setState] = useState({ done: 0, total: 1, ready: false });
   useEffect(() => {
     const urls = getUrls();
@@ -72,7 +70,7 @@ function usePreload(key: string, getUrls: () => string[]) {
       if (done === urls.length) timers.push(window.setTimeout(finish, Math.max(0, MIN_MS - (performance.now() - start))));
     };
     urls.forEach((u) => unsubs.push(subscribeImage(u, check)));
-    timers.push(window.setTimeout(finish, MAX_MS));
+    timers.push(window.setTimeout(finish, maxMs));
     check();
     return () => { alive = false; unsubs.forEach((f) => f()); timers.forEach((t) => window.clearTimeout(t)); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
