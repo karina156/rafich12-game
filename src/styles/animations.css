@@ -1,0 +1,45 @@
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes pop { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes shake { 0%,100% { transform: translate(0,0); } 20% { transform: translate(-6px,2px); } 40% { transform: translate(5px,-3px); } 60% { transform: translate(-4px,3px); } 80% { transform: translate(3px,-2px); } }
+@keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes drop { 0% { transform: translateY(-60px); opacity: 0; } 70% { transform: translateY(4px); opacity: 1; } 100% { transform: translateY(0); } }
+@keyframes enterLeft { from { transform: translateX(-120%); } to { transform: translateX(0); } }
+@keyframes enterRight { from { transform: translateX(120%); } to { transform: translateX(0); } }
+@keyframes glow { 0%,100% { filter: drop-shadow(0 0 4px var(--yellow)); } 50% { filter: drop-shadow(0 0 14px var(--yellow)); } }
+@keyframes glitch {
+  0% { transform: translate(0); filter: none; }
+  20% { transform: translate(-6px, 2px); filter: hue-rotate(90deg) saturate(3); }
+  40% { transform: translate(6px, -2px); clip-path: inset(10% 0 40% 0); }
+  60% { transform: translate(-3px, 0); filter: invert(1); clip-path: none; }
+  80% { transform: translate(4px, 3px); filter: hue-rotate(-90deg); }
+  100% { transform: translate(0); filter: none; }
+}
+@keyframes flash { from { opacity: .9; } to { opacity: 0; } }
+@keyframes confettiFall { 0% { transform: translate(0, -20px) rotate(0); opacity: 1; } 100% { transform: translate(var(--dx), 600px) rotate(var(--rot)); opacity: .9; } }
+@keyframes confettiBurst { 0% { transform: translate(0, 0) rotate(0); opacity: 1; } 100% { transform: translate(var(--dx), -280px) rotate(var(--rot)); opacity: 0; } }
+@keyframes floatUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-40px); opacity: 0; } }
+@keyframes pixelIn { 0% { opacity: 0; } 40%, 60% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes twinkle { 0%,100% { opacity: .2; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.2); } }
+@keyframes runAcross { 0% { left: 110%; } 100% { left: -30%; } }
+@keyframes arcUp { 50% { transform: translateY(-50px) scale(1.04); } }
+@keyframes arcDown { 50% { transform: translateY(30px) scale(.96); } }
+
+.anim-bob { animation: bob 1.8s steps(4) infinite; }
+.anim-bob-fast { animation: bob 1s steps(4) infinite; }
+.anim-pop { animation: pop .35s ease-out both; }
+.anim-blink { animation: blink 1s steps(1) infinite; }
+.anim-shake, .shake { animation: shake .35s linear; }
+.anim-fade { animation: fade .8s ease-out both; }
+.anim-drop { animation: drop .4s ease-out both; }
+.anim-enter-left { animation: enterLeft .5s steps(8) both; }
+.anim-enter-right { animation: enterRight .5s steps(8) both; }
+.anim-glow { animation: glow 1.4s ease-in-out infinite; }
+.anim-wiggle { animation: wiggle .5s steps(2) infinite; }
+.glitch-screen { animation: glitch .25s steps(2) 3; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-bob, .anim-bob-fast, .anim-wiggle, .anim-glow { animation: none; }
+}

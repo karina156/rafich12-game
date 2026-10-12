@@ -1,0 +1,28 @@
+:root {
+  --lavender: #B79CFF;
+  --pink: #F6A9C9;
+  --peach: #FFC89A;
+  --cream: #FFF1D6;
+  --mint: #AEE5D1;
+  --sky: #A8D8FF;
+  --plum: #4E3B67;
+  --navy: #465A7A;
+  --heart: #FF6B8A;
+  --yellow: #FFD95E;
+
+  --plum-dark: #33264a;
+  --ink: #3a2c4f;
+  --px: 3px; /* толщина пиксельной обводки */
+
+  --font-title: 'Press Start 2P', 'Anonymous Pro', monospace;
+  --font-body: 'Anonymous Pro', 'Courier New', monospace;
+
+  /* срез border-image для PNG-рамок из Figma (подстроить под реальные файлы) */
+  --skin-slice-button: 20;
+  --skin-slice-dialog: 32;
+  --skin-slice-panel: 46;
+  /* толщина, с которой рамка рисуется на экране */
+  --skin-w-button: 16px;
+  --skin-w-dialog: 28px;
+  --skin-w-panel: 30px;
+}

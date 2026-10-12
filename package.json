@@ -1,0 +1,27 @@
+{
+  "name": "rafich12-birthday-incident",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "assets:check": "node scripts/check-assets.mjs",
+    "assets:doc": "node scripts/check-assets.mjs --write-doc"
+  },
+  "dependencies": {
+    "@fontsource/anonymous-pro": "^5.2.6",
+    "@fontsource/press-start-2p": "^5.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "typescript": "5.8",
+    "vite": "^7.3.7"
+  }
+}

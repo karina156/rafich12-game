@@ -1,0 +1,69 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; overflow: hidden; }
+body {
+  background: var(--plum-dark);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.3;
+  -webkit-font-smoothing: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+}
+img, .sprite { image-rendering: pixelated; image-rendering: crisp-edges; }
+button { font: inherit; color: inherit; cursor: pointer; }
+h1, h2, h3 { margin: 0; font-weight: normal; }
+p { margin: 0 0 8px; }
+code { font-family: monospace; background: rgba(78,59,103,.12); padding: 0 4px; font-size: .85em; user-select: text; }
+.muted { opacity: .75; font-size: .85em; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.row.center { justify-content: center; }
+.menu-col { display: flex; flex-direction: column; gap: 10px; align-items: stretch; min-width: 260px; }
+.danger { color: var(--heart); }
+
+/* ---------- сцена фиксированного размера ---------- */
+.viewport { position: fixed; inset: 0; overflow: hidden; background:
+  radial-gradient(circle at 50% 40%, #5d4880 0%, var(--plum-dark) 70%); }
+.stage { position: absolute; left: 50%; top: 50%; transform-origin: center; overflow: hidden;
+  background: var(--plum); box-shadow: 0 0 0 4px #000, 0 20px 60px rgba(0,0,0,.5); }
+.scene { position: absolute; inset: 0; display: flex; flex-direction: column; }
+
+.scene-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none; }
+/* корневые контейнеры сцен — отдельный слой, чтобы фон (z-index:-1) был под содержимым */
+.start, .cutscene, .select, .room, .final, .coffee, .boss, .room-scene, .level { isolation: isolate; }
+.scene-bg-fallback {
+  background:
+    linear-gradient(180deg, transparent 0 62%, rgba(78,59,103,.25) 62% 100%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 24px, transparent 24px 48px),
+    linear-gradient(180deg, #a8d8ff, #d9ecff);
+}
+
+/* ---------- заглушка спрайта ---------- */
+.sprite { display: inline-block; object-fit: contain; flex: none; vertical-align: middle; }
+.sprite.flip { transform: scaleX(-1); }
+.sprite-missing {
+  position: relative; display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; text-align: center; overflow: hidden; padding: 2px;
+  background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--tint) 55%, white) 0 6px, color-mix(in srgb, var(--tint) 35%, white) 6px 12px);
+  border: 2px dashed var(--plum); border-radius: 2px;
+  font-family: var(--font-body); color: var(--plum); line-height: 1.05;
+}
+.sprite-missing-label { font-size: 12px;  background: rgba(255,241,214,.85); padding: 0 3px; max-width: 100%; overflow-wrap: anywhere; }
+.sprite-missing-path { font-size: 9px; opacity: .8; max-width: 100%; overflow-wrap: anywhere; }
+
+/* Фон background.png (rewards/final_bg.png) вместо тёмных подложек — включается, когда файл есть */
+.skin-meadow .viewport,
+.skin-meadow .boss img.scene-bg,
+.skin-meadow .coffee img.scene-bg,
+.skin-meadow .boss .scene-bg-fallback,
+.skin-meadow .coffee .scene-bg-fallback { background: var(--skin-meadow) center / cover no-repeat; }
+.skin-meadow .start .scene-bg-fallback { background: linear-gradient(rgba(20,14,34,.62), rgba(20,14,34,.62)), var(--skin-meadow) center / cover no-repeat; }
+/* верхнее меню без тёмной плашки: фон-луг идёт под ним одним куском */
+.skin-meadow .level, .skin-meadow .room-scene { background: var(--skin-meadow) center / cover no-repeat; }
+.skin-meadow .level-stage, .skin-meadow .room-wrap { background: none; }
+.skin-meadow .level-bar, .skin-meadow .hud { background: none; border-bottom: 0; box-shadow: none; color: var(--plum); }
+.skin-meadow .hud-nick, .skin-meadow .hud-class { text-shadow: 0 0 4px #fff, 0 0 2px #fff; }
+.skin-meadow .hud-coins { color: var(--plum); text-shadow: 0 0 4px #fff; }
