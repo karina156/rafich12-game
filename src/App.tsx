@@ -5,6 +5,7 @@ import { PixelTransition } from './components/PixelTransition';
 import { AchievementPopup } from './components/AchievementPopup';
 import { PauseMenu } from './components/PauseMenu';
 import { LevelShell } from './components/LevelShell';
+import { LoadingScreen, useBootPreload } from './components/LoadingScreen';
 import { StartScreen } from './scenes/StartScreen';
 import { IntroCutscene } from './scenes/IntroCutscene';
 import { CharacterSelect } from './scenes/CharacterSelect';
@@ -83,6 +84,7 @@ export default function App() {
   const paused = useGame((s) => s.paused);
   const setPaused = useGame((s) => s.setPaused);
   const phone = useIsPhone();
+  const boot = useBootPreload();
 
   useEffect(() => {
     sound.setSfxEnabled(soundEnabled);
@@ -112,9 +114,13 @@ export default function App() {
 
   return (
     <Stage>
-      <div className={`scene scene-${scene.replace(':', '-')}`} key={scene}>
-        <Scene scene={scene} />
-      </div>
+      {boot.ready ? (
+        <div className={`scene scene-${scene.replace(':', '-')}`} key={scene}>
+          <Scene scene={scene} />
+        </div>
+      ) : (
+        <LoadingScreen done={boot.done} total={boot.total} />
+      )}
       <PixelTransition sceneKey={scene} />
       <AchievementPopup />
       {paused && <PauseMenu />}

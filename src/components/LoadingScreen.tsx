@@ -27,6 +27,15 @@ const PHRASES = [
 const MIN_MS = 1400;
 const MAX_MS = 10000;
 
+/** Картинки первых экранов: старт, заставка, выбор Рафа, комната, HUD и финальный фон */
+const BOOT = ['raf.', 'karini.', 'monkey.', 'ui.', 'icon.', 'room.', 'bg.', 'final.bg', 'item.bigGift'];
+
+function urlsFor(prefixes: string[]): string[] {
+  return (Object.keys(ASSETS) as AssetKey[])
+    .filter((k) => prefixes.some((p) => k === p || (p.endsWith('.') && k.startsWith(p))))
+    .map((k) => assetUrl(ASSETS[k].path));
+}
+
 function assetsFor(level: LevelId, raf: string | null): string[] {
   const prefixes = [...COMMON, ...LEVEL_ASSETS[level]];
   const keys = (Object.keys(ASSETS) as AssetKey[]).filter(
@@ -39,9 +48,18 @@ function assetsFor(level: LevelId, raf: string | null): string[] {
 /** Загружает картинки уровня. Готово, когда все ответили (или вышло время), но не раньше MIN_MS. */
 export function useLevelPreload(level: LevelId) {
   const raf = useGame((s) => s.selectedCharacter);
+  return usePreload(`${level}:${raf}`, () => assetsFor(level, raf));
+}
+
+/** Загрузка перед самым началом игры — чтобы старт, заставка и комната открывались уже с картинками */
+export function useBootPreload() {
+  return usePreload('boot', () => urlsFor(BOOT));
+}
+
+function usePreload(key: string, getUrls: () => string[]) {
   const [state, setState] = useState({ done: 0, total: 1, ready: false });
   useEffect(() => {
-    const urls = assetsFor(level, raf);
+    const urls = getUrls();
     const start = performance.now();
     let alive = true;
     const unsubs: (() => void)[] = [];
@@ -57,7 +75,8 @@ export function useLevelPreload(level: LevelId) {
     timers.push(window.setTimeout(finish, MAX_MS));
     check();
     return () => { alive = false; unsubs.forEach((f) => f()); timers.forEach((t) => window.clearTimeout(t)); };
-  }, [level, raf]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
   return state;
 }
 
